@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Ticket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f0f2f5;
+    }
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .bus-type-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 5px;
+    }
+    .bus-type-options label {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: normal;
+    }
+    .bus-type-options input {
+      display: none;
+    }
+    .bus-type-options input:checked + span {
+      background: #00baf2;
+      color: white;
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background: #00baf2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Create Ticket</h2>
+    <form action="t3.html" method="get">
+      <label>From:</label>
+      <input type="text" name="from" required>
+
+      <label>To:</label>
+      <input type="text" name="to" required>
+
+      <label>Bus Type:</label>
+      <div class="bus-type-options">
+        <label><input type="radio" name="busType" value="EV" required><span>EV</span></label>
+        <label><input type="radio" name="busType" value="AC"><span>AC</span></label>
+        <label><input type="radio" name="busType" value="Non AC"><span>Non AC</span></label>
+        <label><input type="radio" name="busType" value="Local"><span>Local</span></label>
+        <label><input type="radio" name="busType" value="Shuttle"><span>Shuttle</span></label>
+      </div>
+
+      <label>Ticket Count:</label>
+      <input type="number" name="tickets" value="1" min="1" required>
+
+      <label>Amount (₹):</label>
+      <input type="number" name="amount" value="45" required>
+
+      <button type="submit">Next</button>
+    </form>
+  </div>
+</body>
+</html>
