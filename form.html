@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Create Ticket</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f0f2f5; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    .card { background:white; padding:18px; border-radius:10px; width:340px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+    h2 { margin:0 0 12px 0; font-size:18px; }
+    label { display:block; margin-top:10px; font-weight:600; font-size:13px; }
+    input[type="text"], input[type="number"] { width:100%; padding:8px 10px; margin-top:6px; box-sizing:border-box; border-radius:6px; border:1px solid #ccc; }
+    .bus-types { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .bus-types label { cursor:pointer; user-select:none; border:1px solid #ccc; padding:7px 10px; border-radius:8px; font-weight:500; background:white; }
+    .bus-types input { display:none; }
+    /* checked style using sibling span */
+    .bus-types input:checked + span { background:#00baf2; color:white; border-radius:6px; padding:7px 10px; display:inline-block; }
+    .note { font-size:12px; color:#666; margin-top:6px; }
+    button { margin-top:14px; width:100%; padding:11px; background:#00baf2; color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+    .small { font-size:12px; color:#d00; margin-top:6px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Create Ticket</h2>
+
+    <form id="ticketForm" action="t3.html" method="get">
+      <label for="from">From</label>
+      <input id="from" name="from" type="text" required value="Panaji">
+
+      <label for="to">To</label>
+      <input id="to" name="to" type="text" required value="Margao">
+
+      <label>Bus Type (choose up to 2)</label>
+      <div class="bus-types" id="busTypes">
+        <label><input type="checkbox" name="busTypeChoice" value="EV"><span>EV</span></label>
+        <label><input type="checkbox" name="busTypeChoice" value="AC"><span>AC</span></label>
+        <label><input type="checkbox" name="busTypeChoice" value="Non AC"><span>Non AC</span></label>
+        <label><input type="checkbox" name="busTypeChoice" value="EV AC"><span>EV AC</span></label>
+        <label><input type="checkbox" name="busTypeChoice" value="Local"><span>Local</span></label>
+        <label><input type="checkbox" name="busTypeChoice" value="Shuttle"><span>Shuttle</span></label>
+      </div>
+      <div class="note" id="busTypeNote">You can select up to 2 types.</div>
+
+      <label for="tickets">Ticket Count</label>
+      <input id="tickets" name="tickets" type="number" min="1" value="1" required>
+
+      <label for="amount">Amount (₹)</label>
+      <input id="amount" name="amount" type="number" min="0" value="45" required>
+
+      <!-- hidden input to hold combined busType value -->
+      <input type="hidden" name="busType" id="busType">
+
+      <button type="submit">Next →</button>
+    </form>
+  </div>
+
+  <script>
+    (function(){
+      const checkboxes = Array.from(document.querySelectorAll('input[name="busTypeChoice"]'));
+      const maxAllowed = 2;
+      const busTypeHidden = document.getElementById('busType');
+      const form = document.getElementById('ticketForm');
+
+      function updateCheckboxState() {
+        const checked = checkboxes.filter(c => c.checked);
+        // disable unchecked when already max selected
+        if (checked.length >= maxAllowed) {
+          checkboxes.forEach(c => { if (!c.checked) c.disabled = true; });
+        } else {
+          checkboxes.forEach(c => c.disabled = false);
+        }
+      }
+
+      checkboxes.forEach(cb => cb.addEventListener('change', updateCheckboxState));
+
+      // on submit combine values into hidden input
+      form.addEventListener('submit', (e) => {
+        const selected = checkboxes.filter(c => c.checked).map(c => c.value);
+        if (selected.length === 0) {
+          // allow no selection? we require at least one selection. prevent submit
+          e.preventDefault();
+          alert('Please select at least one bus type.');
+          return;
+        }
+        // join by comma (safe in URL)
+        busTypeHidden.value = selected.join(',');
+        // proceed with GET submit (form action -> t3.html?from=...&busType=EV,AC&...)
+      });
+
+      // Optional: pre-check the Shuttle option by default
+      const defaultBox = checkboxes.find(c => c.value === 'Shuttle');
+      if (defaultBox) defaultBox.checked = true;
+      updateCheckboxState();
+    })();
+  </script>
+</body>
+</html>
